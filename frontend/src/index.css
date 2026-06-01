@@ -6,13 +6,12 @@ html,
 body,
 #root {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
 }
 
 body {
-  background: #0B0F19;
-  color: white;
   margin: 0;
-  padding: 0;
+  background: #0b1220;
+  color: white;
   font-family: Pretendard, sans-serif;
 }

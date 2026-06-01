@@ -59,19 +59,33 @@ GitHub Actions
 # 디렉토리 구조
 ---
 
-frontend
-└─ src
-   ├─ assets
-   ├─ pages
-   ├─ routes
-   ├─ layouts
-   ├─ store
-   ├─ services
-   ├─ hooks
-   ├─ components
-   ├─ styles
-   ├─ App.jsx
-   └─ main.jsx
+frontend/src
+├─ components
+│  ├─ Header.jsx
+│  ├─ SummaryCards.jsx
+│  ├─ StockTable.jsx
+│  ├─ ChartPanel.jsx
+│  └─ WelcomeAnimation.jsx
+│
+├─ pages
+│  ├─ DashboardPage.jsx
+│  ├─ LandingPage.jsx
+│  ├─ LoginPage.jsx
+│  ├─ SignupPage.jsx
+│  └─ WelcomePage.jsx
+│
+├─ routes
+│  └─ AppRouter.jsx
+│
+├─ services
+│  └─ firebase.js
+│
+├─ store
+│  └─ authStore.js
+│
+├─ App.jsx
+├─ main.jsx
+└─ index.css
 
 ---
 # 핵심 설계 원칙
@@ -162,6 +176,26 @@ Socket.io 실시간 전파
 ---
 # 전체 레이아웃
 ---
+
+# flow chart text
+
+The app has the following navigation flow:
+
+1. The user first lands on a "Before Login" page (Landing Page).
+2. From there, they can go to either:
+   - "Login Page" (if they already have an account)
+   - "Sign Up Page" (if they don't have an account)
+
+3. On the Login Page:
+   - If the user does not have an account → navigate to Sign Up Page
+
+4. On the Sign Up Page:
+   - If the user already has an account → navigate to Login Page
+   - After completing sign-up → navigate to Login Page
+
+5. After a successful login → navigate to "Welcome Page"
+
+6. From the Welcome Page → navigate to "Main Page"
 
 # first meet
 ┌─────────────────────────────────────┐
@@ -1120,3 +1154,7 @@ STEP 9
 
 형식으로 제공하면, 사용자는 파일을 찾거나 부분 수정 위치를 고민할 필요 없이 그대로 적용할 수 있습니다.
 
+마지막에 현재 생성된 모든 디렉토리, 파일 구조를 보여줍니다.
+
+
+좋아요! STEP  전부 해결했어요. 이제 STEP  진행해주세요.
