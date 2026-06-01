@@ -1,0 +1,79 @@
+# =========================================================================
+# Watch Up - Backend Git Ignore Configuration
+# =========================================================================
+
+# 1. Dependency Directories (의존성 패키지)
+node_modules/
+jspm_packages/
+web_modules/
+
+# 2. Firebase & Authentication Credentials (보안 필수: 절대 커밋 금지)
+# Firebase Admin SDK Private Key JSON 파일 방어
+*.json
+!package.json
+!package-lock.json
+
+# 3. Environment Variables (환경 변수 파일)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 4. Python Environment & yfinance Cache (파이썬 가상환경 및 캐시)
+venv/
+.venv/
+env/
+.env/
+ENV/
+pyvenv.cfg
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Python Byte-compiled / optimized / dll files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 5. Logs and Diagnostics (로그 및 실행 기록)
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 6. Operating System Files (운영체제 시스템 파일)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 7. IDEs and Editors (편집기 개인 설정 파일)
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
