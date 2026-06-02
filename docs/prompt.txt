@@ -434,9 +434,29 @@ OPTION:
 
 users
 └── uid
-├── profile
-├── holdings
-└── transactions
+   ├── profile
+   │  └── nickname
+   ├── holdings
+   │  └── holdingId
+   │     ├── stockCode
+   │     ├── stockName
+   │     ├── averagePrice
+   │     ├── quantity
+   │     ├── createdAt
+   │     └── updatedAt
+   └── transactions
+     └── transactionId
+        ├── type
+        ├── price
+        ├── quantity
+        ├── profit
+        └── createdAt
+
+---
+
+# profile
+
+* nickname
 
 ---
 
