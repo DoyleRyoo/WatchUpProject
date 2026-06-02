@@ -1,77 +1,32 @@
 import { create } from "zustand";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-
-import {
-  doc,
-  setDoc,
-  getDoc,
-  serverTimestamp,
-} from "firebase/firestore";
-
-import { auth, db } from "../services/firebase";
 
 const useAuthStore = create((set) => ({
   user: null,
-  nickname: null,
-  loading: false,
 
-  signup: async (email, password, nickname) => {
-    const credential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+  nickname: "",
 
-    const uid = credential.user.uid;
+  loading: true,
 
-    await setDoc(doc(db, "users", uid), {
-      profile: {
-        nickname,
-        email,
-        createdAt: serverTimestamp(),
-      },
-    });
-
+  setUser: (user) =>
     set({
-      user: credential.user,
+      user,
+    }),
+
+  setNickname: (nickname) =>
+    set({
       nickname,
-    });
-  },
+    }),
 
-  login: async (email, password) => {
-    const credential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-    const uid = credential.user.uid;
-
-    const snapshot = await getDoc(
-      doc(db, "users", uid)
-    );
-
-    const data = snapshot.data();
-
+  setLoading: (loading) =>
     set({
-      user: credential.user,
-      nickname: data?.profile?.nickname ?? "",
-    });
-    return credential.user;
-  },
+      loading,
+    }),
 
-  logout: async () => {
-    await signOut(auth);
-
+  logoutStore: () =>
     set({
       user: null,
-      nickname: null,
-    });
-  },
+      nickname: "",
+    }),
 }));
 
 export default useAuthStore;

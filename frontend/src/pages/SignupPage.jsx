@@ -1,98 +1,89 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import useAuthStore from "../store/authStore";
+
+import { signup } from "../services/authService";
+
+import { useNavigate } from "react-router-dom";
 
 export default function SignupPage() {
   const navigate = useNavigate();
 
-  const signup = useAuthStore(
-    (state) => state.signup
-  );
+  const [email, setEmail] =
+    useState("");
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    nickname: "",
-  });
+  const [password, setPassword] =
+    useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const [nickname, setNickname] =
+    useState("");
 
+  const handleSignup = async () => {
     try {
       await signup(
-        form.email,
-        form.password,
-        form.nickname
+        email,
+        password,
+        nickname
       );
 
       navigate("/login");
-    } catch (error) {
-      alert(error.message);
+    } catch (err) {
+      alert(err.message);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8"
-      >
-        <h1 className="text-3xl text-white font-bold mb-8 text-center">
-          Watch Up
+    <div className="flex h-screen items-center justify-center">
+
+      <div className="w-96 rounded-3xl bg-card p-8">
+
+        <h1 className="mb-8 text-center text-3xl font-bold">
+          Watch Up!
         </h1>
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full mb-4 p-3 rounded-xl bg-slate-900 text-white"
-          value={form.email}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              email: e.target.value,
-            })
-          }
-        />
+        <div className="space-y-4">
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full mb-4 p-3 rounded-xl bg-slate-900 text-white"
-          value={form.password}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              password: e.target.value,
-            })
-          }
-        />
+          <input
+            className="h-12 w-full rounded-xl bg-slate-800 px-4"
+            placeholder="Email"
+            value={email}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+          />
 
-        <input
-          type="text"
-          placeholder="Nickname"
-          className="w-full mb-6 p-3 rounded-xl bg-slate-900 text-white"
-          value={form.nickname}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              nickname: e.target.value,
-            })
-          }
-        />
+          <input
+            type="password"
+            className="h-12 w-full rounded-xl bg-slate-800 px-4"
+            placeholder="Password"
+            value={password}
+            onChange={(e) =>
+              setPassword(
+                e.target.value
+              )
+            }
+          />
 
-        <button
-          className="w-full h-12 rounded-xl bg-blue-600 text-white"
-        >
-          Sign Up
-        </button>
+          <input
+            className="h-12 w-full rounded-xl bg-slate-800 px-4"
+            placeholder="Nickname"
+            value={nickname}
+            onChange={(e) =>
+              setNickname(
+                e.target.value
+              )
+            }
+          />
 
-        <Link
-          to="/login"
-          className="block text-center text-slate-400 mt-4"
-        >
-          Already have an account?
-        </Link>
-      </form>
+          <button
+            onClick={handleSignup}
+            className="h-12 w-full rounded-xl bg-blue-600"
+          >
+            Sign Up
+          </button>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

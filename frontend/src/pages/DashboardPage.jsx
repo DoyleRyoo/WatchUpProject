@@ -1,58 +1,91 @@
-import { useState } from "react";
+import { useEffect } from "react";
 
-import Header from "../components/Header";
+import DashboardLayout from "../layouts/DashboardLayout";
+
 import SummaryCards from "../components/SummaryCards";
-import StockTable from "../components/StockTable";
-import ChartPanel from "../components/ChartPanel";
+import HoldingsTable from "../components/HoldingsTable";
+import StockChartPanel from "../components/StockChartPanel";
+
+import useStockStore from "../store/useStockStore";
+
+import { auth } from "../services/firebase";
+
+import { getHoldings } from "../services/firestoreService";
+
+import { socket } from "../services/socket";
 
 export default function DashboardPage() {
-  const [selectedStock, setSelectedStock] =
-    useState(null);
+  const updatePrice = useStockStore(
+    (state) => state.updatePrice
+  );
+
+  useEffect(() => {
+    socket.on("stock:update", updatePrice);
+
+    return () => {
+      socket.off("stock:update", updatePrice);
+    };
+  }, []);
+  
+  const {
+    holdings,
+    selectedStock,
+    setHoldings,
+  } = useStockStore();
+
+  useEffect(() => {
+    const load = async () => {
+      const uid =
+        auth.currentUser?.uid;
+
+      if (!uid) return;
+
+      const data =
+        await getHoldings(uid);
+
+      setHoldings(data);
+    };
+
+    load();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-[#0B0F19]">
-      <Header />
+    <DashboardLayout
+      nickname={
+        auth.currentUser?.displayName ||
+        "User"
+      }
+    >
+      <SummaryCards />
 
-      <main
+      <div className="h-6" />
+
+      <div
         className="
-        max-w-7xl
-        mx-auto
-        p-6
-        space-y-6
+        flex
+        gap-6
+        transition-all
+        duration-500
         "
       >
-        <SummaryCards />
-
         <div
-          className="
-          flex
-          gap-6
-          transition-all
-          duration-500
-          "
+          className={
+            selectedStock
+              ? "w-[45%]"
+              : "w-full"
+          }
         >
-          <div
-            className={
-              selectedStock
-                ? "w-[45%]"
-                : "w-full"
-            }
-          >
-            <StockTable
-              isChartOpen={!!selectedStock}
-              onSelectStock={setSelectedStock}
+          <HoldingsTable />
+        </div>
+
+        {selectedStock && (
+          <div className="w-[55%]">
+            <StockChartPanel
+              stock={selectedStock}
             />
           </div>
-
-          {selectedStock && (
-            <div className="w-[55%]">
-              <ChartPanel
-                selectedStock={selectedStock}
-              />
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
+        )}
+      </div>
+    </DashboardLayout>
   );
 }

@@ -1,59 +1,70 @@
-import { motion } from "framer-motion";
+import { signOut } from "firebase/auth";
+import { auth } from "../services/firebase";
 
-const cards = [
-  {
-    title: "TOTAL BUY",
-    value: "₩12,000,000",
-  },
-  {
-    title: "TOTAL ASSET",
-    value: "₩13,850,000",
-  },
-  {
-    title: "TOTAL RETURN",
-    value: "+15.42%",
-  },
-  {
-    title: "TOTAL PROFIT",
-    value: "₩1,850,000",
-  },
-];
+export default function Header({
+  nickname,
+}) {
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
 
-export default function SummaryCards() {
   return (
-    <div
+    <header
       className="
-      grid
-      grid-cols-1
-      md:grid-cols-2
-      xl:grid-cols-4
-      gap-5
+      sticky top-0 z-50
+      backdrop-blur-xl
+      bg-white/5
+      border-b border-white/10
       "
     >
-      {cards.map((card) => (
-        <motion.div
-          whileHover={{
-            y: -4,
-          }}
-          key={card.title}
+      <div
+        className="
+        max-w-7xl
+        mx-auto
+        px-6
+        py-4
+        flex
+        justify-between
+        items-center
+        "
+      >
+        <h1
           className="
-          bg-slate-900
-          border
-          border-slate-800
-          rounded-3xl
-          p-6
-          shadow-lg
+          text-2xl
+          font-bold
+          text-white
           "
         >
-          <p className="text-slate-400 text-sm">
-            {card.title}
-          </p>
+          Watch Up
+        </h1>
 
-          <h3 className="mt-3 text-2xl font-bold text-white">
-            {card.value}
-          </h3>
-        </motion.div>
-      ))}
-    </div>
+        <div className="flex gap-3">
+          <button
+            className="
+            h-11
+            px-5
+            rounded-xl
+            bg-white/10
+            text-white
+            "
+          >
+            {nickname}
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="
+            h-11
+            px-5
+            rounded-xl
+            bg-red-500
+            text-white
+            "
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
   );
 }

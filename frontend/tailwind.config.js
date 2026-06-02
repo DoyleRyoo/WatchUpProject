@@ -2,28 +2,17 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,jsx}",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        background: "#0B1220",
-        card: "#111827",
-        border: "#1F2937",
+        background: "#0F172A",
+        card: "#1E293B",
+        border: "#334155",
 
         profit: "#EF4444",
         loss: "#3B82F6",
-
-        primary: "#F8FAFC",
-        secondary: "#94A3B8",
-      },
-
-      fontFamily: {
-        pretendard: ["Pretendard", "sans-serif"],
-      },
-
-      boxShadow: {
-        glass: "0 8px 32px rgba(0,0,0,0.25)",
       },
     },
   },

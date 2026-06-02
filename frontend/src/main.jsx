@@ -1,12 +1,32 @@
+import "pretendard/dist/web/static/pretendard.css";
+
 import React from "react";
 import ReactDOM from "react-dom/client";
+
+import App from "./App";
+import "./index.css";
 
 import { QueryClient } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 
-import "./index.css";
+import { auth } from "./services/firebase";
 
-import App from "./App";
+import { onAuthStateChanged } from "firebase/auth";
+
+import useAuthStore from "./store/authStore";
+
+onAuthStateChanged(
+  auth,
+  (user) => {
+    useAuthStore
+      .getState()
+      .setUser(user);
+
+    useAuthStore
+      .getState()
+      .setLoading(false);
+  }
+);
 
 const queryClient = new QueryClient();
 

@@ -55,37 +55,61 @@ CI/CD
 
 GitHub Actions
 
+배포
+
+Render
+
 ---
 # 디렉토리 구조
 ---
 
-frontend/src
-├─ components
-│  ├─ Header.jsx
-│  ├─ SummaryCards.jsx
-│  ├─ StockTable.jsx
-│  ├─ ChartPanel.jsx
-│  └─ WelcomeAnimation.jsx
+watch-up
 │
-├─ pages
-│  ├─ DashboardPage.jsx
-│  ├─ LandingPage.jsx
-│  ├─ LoginPage.jsx
-│  ├─ SignupPage.jsx
-│  └─ WelcomePage.jsx
+├── backend
+│   ├── src
+│   │   ├── cache
+│   │   ├── config
+│   │   ├── controllers
+│   │   ├── jobs
+│   │   ├── python
+│   │   ├── routes
+│   │   ├── services
+│   │   ├── socket
+│   │   └── utils
+│   │
+│   ├── server.js
+│   ├── app.js
+│   ├── package.json
+│   ├── requirements.txt
+│   └── .env
 │
-├─ routes
-│  └─ AppRouter.jsx
+├── frontend
+│   ├── src
+│   │   ├── api
+│   │   ├── assets
+│   │   ├── charts
+│   │   ├── components
+│   │   ├── hooks
+│   │   ├── layouts
+│   │   ├── modals
+│   │   ├── pages
+│   │   ├── routes
+│   │   ├── services
+│   │   ├── store
+│   │   ├── styles
+│   │   ├── utils
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   ├── app.css
+│   │   └── index.css
+│   │
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── vite.config.js
+│   └── .env
 │
-├─ services
-│  └─ firebase.js
-│
-├─ store
-│  └─ authStore.js
-│
-├─ App.jsx
-├─ main.jsx
-└─ index.css
+└── .github
+    └── workflows
 
 ---
 # 핵심 설계 원칙
@@ -157,11 +181,10 @@ Socket.io 실시간 전파
 “Watch up!”
 
 2.
-“Watch up!” 텍스트가 좌측 상단으로 이동
+“Watch up!” 텍스트가 흐려짐
 
 3.
-최종적으로:
-“Watch up!” 텍스트를 좌측 상단에 위치
+DashboardPage로 이동 완료
 
 텍스트로 변환.
 
@@ -181,17 +204,18 @@ Socket.io 실시간 전파
 
 The app has the following navigation flow:
 
+0. When open the Watch Up Web, the user must meet "first meet" page 
 1. The user first lands on a "Before Login" page (Landing Page).
 2. From there, they can go to either:
-   - "Login Page" (if they already have an account)
-   - "Sign Up Page" (if they don't have an account)
+   - "Login Page" (if they already have an account)
+   - "Sign Up Page" (if they don't have an account)
 
 3. On the Login Page:
-   - If the user does not have an account → navigate to Sign Up Page
+   - If the user does not have an account → navigate to Sign Up Page
 
 4. On the Sign Up Page:
-   - If the user already has an account → navigate to Login Page
-   - After completing sign-up → navigate to Login Page
+   - If the user already has an account → navigate to Login Page
+   - After completing sign-up → navigate to Login Page
 
 5. After a successful login → navigate to "Welcome Page"
 
@@ -199,158 +223,170 @@ The app has the following navigation flow:
 
 # first meet
 ┌─────────────────────────────────────┐
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│             Watch Up!               │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
+│             Watch Up!               │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
 └─────────────────────────────────────┘
 
 # before login
 
 ┌─────────────────────────────────────┐
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│               Login                 │
-│               Sign up               │
-│                                     │
-│             Watch Up!               │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
+│                                     │
+│                                     │
+│                                     │
+│        ┌─────────────────────┐      │
+│        │      Login          │      │
+│        │      Sign up        │      │
+│        │                     │      │
+│        │    Watch Up!        │      │
+│        └─────────────────────┘      │
+│                                     │
+│                                     │
+│                                     │
 └─────────────────────────────────────┘
 
 # login page
 - before login의 Watch Up!이 자연스럽게 내려가면서 login box가 나온다
 
 ┌─────────────────────────────────────┐
-│                                     │
-│                                     │
-│           │ email        │          │
-│                                     │
-│           │ password     │          │
-│                                     │
-│                login                │
-│                                     │
-│              Watch Up!              │
-│                                     │
-│                                     │
-│                                     │
+│                                     │
+│                                     │
+│       ┌─────────────────────┐       │
+│       │   │ email        │  │       │
+│       │                     │       │
+│       │   │ password     │  │       │
+│       │                     │       │
+│       │        login        │       │
+│       │      Watch Up!      │       │
+│       └─────────────────────┘       |
+│                                     │
+│                                     │
+│                                     │
 └─────────────────────────────────────┘
 
 # sgin up page
 - before login의 Watch Up!이 자연스럽게 내려가면서 sign up box가 나온다
 
 ┌─────────────────────────────────────┐
-│                                     │
-│       ┌─────────────────────┐       │
-│       │   │ email        │  │       │
-│       │                     │       │
-│       │   │ password     │  │       │
-│       │                     │       │
-│       │   | nickname     |  │       │
-│       │      sign up        │       │
-│       │      Watch Up!      │       │
-│       └─────────────────────┘       │
-│                                     │
-│                                     │
+│                                     │
+│       ┌─────────────────────┐       │
+│       │   │ email        │  │       │
+│       │                     │       │
+│       │   │ password     │  │       │
+│       │                     │       │
+│       │   | nickname     |  │       │
+│       │      sign up        │       │
+│       │      Watch Up!      │       │
+│       └─────────────────────┘       │
+│                                     │
+│                                     │
 └─────────────────────────────────────┘
 
 # after login welcome page
 
 ┌─────────────────────────────────────┐
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│          Welcome nickname           │
-│             Watch Up!               │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
+│          Welcome nickname           │
+│             Watch Up!               │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
 └─────────────────────────────────────┘
 
 # main page
 - welcome page에서 자연스럽게 Watch UP는 좌측 상단, nickname은 우측 상단으로 이동하고 아래의 내용이 나온다.
 
 ┌─────────────────────────────────────┐
-│ Watch Up *header           nickname │
+│ Watch Up *header    nickname logout │
 ├─────────────────────────────────────┤
-│ Summary Cards                       │
+│ Summary Cards                       │
 ├─────────────────────────────────────┤
-│                                     │
-│             Stock Table             │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
-│                                     │
+│                        + add stock  │
+├─────────────────────────────────────┤
+│                                     │
+│            Stack Table              │
+│                                     │
+│                                     │
+│                                     │
+│                                     │
 └─────────────────────────────────────┘
 
 # main page details
 - Stock Table의 해당 Stock 행을 클릭시 Stock Table을 좌측으로 45%를 자치할만큼 밀고 남은 부분에 주식 그래프를 보여준다.
 - SummaryCards을 클릭시 Stock Table을 좌측으로 45%를 자치할만큼 밀고 남은 부분에 현재 자신이 가지고 있는 모든 주식을 종합한 그래프를 보여준다.
+- Stock Table의 같은 항목을 클릭시 Stock Table을 다시 중앙으로 즉 # main page 상태로 돌아감
 
 ┌─────────────────────────────────────┐
-│ Watch Up *header           nickname │
+│ Watch Up *header    nickname logout │
 ├─────────────────────────────────────┤
-│ Summary Cards                       │
+│ Summary Cards                       │
 ├─────────────────────────────────────┤
-│                                     │
-│ Stock Table     │ Stock Chart       │
-│                 │                   │
-│                 │                   │
-│                 │                   │
-│                 │                   │
-│                 │                   │
-│                                     │
+│                        + add stock  │
+├─────────────────────────────────────┤
+│                 │                   │
+│ Stock Table     │ Stock Chart       │
+│                 │                   │
+│                 │                   │
+│                 │                   │
+│                                     │
 └─────────────────────────────────────┘
 
 # Stock Chart
 * Stock Chart 규칙
 1. 그래프 우측에 들어갈 가격은 아래와 같이 적용한다.
-  무조건 소수점은 버림한다.
-  해당 기간의 최저점 가격은 그래프 최하단에 위치
-  해당 기간의 고점 가격 + 20%를 그래프 최상단에 위치
-  최하단과 최상단 사이에는 3개의 포인트가 있고 아래에서부터 (최저점) + 25%, + 50%, + 75%로 구성된다.
+  무조건 소수점은 버림한다.
+  해당 기간의 최저점 가격은 그래프 최하단에 위치
+  해당 기간의 고점 가격 + 20%를 그래프 최상단에 위치
+  최하단과 최상단 사이에는 3개의 포인트가 있고 아래에서부터 (최저점) + 25%, + 50%, + 75%로 구성된다.
 2. 그래프 하단에 들어가는 기간은 아래와 같이 표시하고 그래프를 반영한다.
-  정한 일수: 그래프 좌측 끝, 그래프 중간, 그래프 우측 끝
-  1 Day: 0 H 12 H 24 H, 
-  1 Week: Mon Wed Fri, 
-  1 Month: 1 D, 15 D (last day) D
-  1 Year: Jan, Jun, Dec
-  Whole period: (first year to go public) Y, (middle year) Y, (this year) Y
+  정한 일수: 그래프 좌측 끝, 그래프 중간, 그래프 우측 끝
+  1 Day: 0 H 12 H 24 H, 
+  1 Week: Mon Wed Fri, 
+  1 Month: 1 D, 15 D (last day) D
+  1 Year: Jan, Jun, Dec
+  Whole period: (first year to go public) Y, (middle year) Y, (this year) Y
 3. 그래프 내부 클릭시 해당 시간의 가격만 보여준다. 가격은 소수점 둘째자리까지 표현하고 나머지는 버림한다.
 4. 그래프 외부 클릭시 내부에 보여지고 있는 가격이 있다면 보여주지않게 만든다. 없을 경우 아무일도 일어나지 않는다.
 
 ┌─────────────────────────┐
-│ 기업명 해당기간대비 상승률  │
-│                         │
-│                         │
-│ │                       │
-│ │                       │
-│ │                       │
-│ │                       │
-│ └─────────────────      │
+│ 기업명 해당기간대비 상승률  │
+│                         │
+│                         │
+│ │                       │
+│ │                       │
+│ │                       │
+│ │                       │
+│ └─────────────────      │
 │해당기간최저점|해단기간최고점 │
-│                         │
-│                         │
-│                         │
+│                         │
+│                         │
+│                         │
 └─────────────────────────┘
+
+---
+# UI 보충 설명
+---
+
+LandingPage의 "Sign up" 버튼과 "Login" 버튼의 가로 세로 크기는 같아야한다.
+
+DashboardPage의 "Logout" 버튼과 "+ Add" 버튼의 가로 세로 크기는 같아야한다.
+
+SignupPage과 LoginPage의 모든 input, button의 가로 세로 크기는 같아야한다.
 
 ---
 # Header
@@ -388,6 +424,12 @@ The app has the following navigation flow:
 총 수익 금액
 
 카드는 hover 애니메이션 적용.
+
+---
+# add button
+---
+
+우측에 "+ Add" 추가 버튼
 
 ---
 # 보유 종목 테이블
@@ -434,23 +476,23 @@ OPTION:
 
 users
 └── uid
-   ├── profile
-   │  └── nickname
-   ├── holdings
-   │  └── holdingId
-   │     ├── stockCode
-   │     ├── stockName
-   │     ├── averagePrice
-   │     ├── quantity
-   │     ├── createdAt
-   │     └── updatedAt
-   └── transactions
-     └── transactionId
-        ├── type
-        ├── price
-        ├── quantity
-        ├── profit
-        └── createdAt
+   ├── profile
+   │  └── nickname
+   ├── holdings
+   │  └── holdingId
+   │     ├── stockCode
+   │     ├── stockName
+   │     ├── averagePrice
+   │     ├── quantity
+   │     ├── createdAt
+   │     └── updatedAt
+   └── transactions
+     └── transactionId
+        ├── type
+        ├── price
+        ├── quantity
+        ├── profit
+        └── createdAt
 
 ---
 
@@ -503,11 +545,6 @@ transactionId
 
 “아직 보유한 주식이 없어요!”
 
-아래:
-[ + 추가하기 ]
-
-버튼 클릭 시 추가 모달 오픈.
-
 ---
 # 추가 모달
 ---
@@ -518,15 +555,11 @@ transactionId
 구성:
 
 종목 검색
-[ 삼성전자 검색 ]
+[ 종목명 ]
+
+실시간 검색 기능 제공.
 
 자동완성 기능 제공.
-
-검색 결과:
-
-* 삼성전자
-* 삼성SDI
-* 삼성바이오로직스
 
 선택 가능.
 
@@ -544,6 +577,7 @@ transactionId
 * DB 저장
 * 즉시 UI 반영
 * 실시간 데이터 연결
+* DashboardPage로 복귀
 
 ---
 # 수정 모달
@@ -563,6 +597,13 @@ transactionId
 [ 취소 ]
 [ 수정 ]
 
+수정 시:
+
+* DB 수장
+* 즉시 UI 반영
+* 실시간 데이터 연결
+* DashboardPage로 복귀
+
 ---
 # 삭제 모달
 ---
@@ -576,6 +617,13 @@ transactionId
 하단:
 [ 취소 ]
 [ 삭제 ]
+
+삭제 시:
+
+* DB 삭제
+* 즉시 UI 반영
+* 실시간 데이터 연결
+* DashboardPage로 복귀
 
 ---
 # 판매 모달
@@ -598,6 +646,9 @@ transactionId
 * 보유 수량 감소
 * 수익 계산
 * 종합 데이터 업데이트
+* 즉시 UI 반영
+* 실시간 데이터 연결
+* DashboardPage로 복귀
 
 수익 계산 방식:
 
@@ -624,6 +675,7 @@ transactionId
 * 1개월
 * 3개월
 * 1년
+* 전체 기간
 
 ApexCharts 사용.
 
@@ -668,9 +720,11 @@ Zustand 사용.
 * 모달 상태
 
 ---
-#   CRUD 구조
+#   CRUD 구조
 ---
+
 Firebase Admin SDK 사용
+
 ---
 # 데이터베이스 설계
 ---
@@ -744,7 +798,7 @@ TailwindCSS 기반 모던 금융 UI 구성.
 * Toss
 * Upbit
 * TradingView
-  스타일을 참고한 고급 금융 대시보드 느낌.
+  스타일을 참고한 고급 금융 대시보드 느낌.
 
 ---
 # 디자인 시스템
@@ -800,381 +854,13 @@ WebSocket 연결 최적화
 Skeleton loading 사용
 
 ---
-
 # 최종 목표
-
 ---
 
 단순 CRUD 프로젝트가 아닌,
 실제 금융 서비스 수준의 사용자 경험을 제공하는 실시간 모의 투자 대시보드를 구축한다.
 프로젝트를 만들 때 필요한 모든 코드는 전체 대체면 전체 대체로 적어주고 수정이면 어느 파일의 어느 부분인지 정확히 집어주어야 한다.
 
-추천 개발 방식
-규칙
-
-매 단계마다 내가 제공하는 내용은 반드시 아래 둘 중 하나만 제공
-
-신규 파일 생성
-[CREATE]
-
-frontend/src/pages/LoginPage.jsx
-
-전체 코드 제공
-
-기존 파일 수정
-[MODIFY]
-
-frontend/src/store/authStore.js
-
-기존 코드 전체 삭제 후 아래 코드로 전체 교체
-
-전체 코드 제공
-
-이 방식이면
-
-복붙 가능
-누락 없음
-어디를 수정해야 하는지 명확
-Cursor 없이도 개발 가능
-Watch Up 개발 로드맵
-
-총 12단계 추천
-
-STEP 1
-
-프로젝트 초기 세팅
-
-목표
-
-React
-Vite
-Tailwind
-Router
-Zustand
-TanStack Query
-Axios
-Firebase
-
-설치
-
-결과
-
-npm run dev
-
-실행 성공
-
-생성 파일
-
-src/
-
-기본 구조
-
-STEP 2
-
-Firebase Authentication
-
-목표
-
-회원가입
-로그인
-로그아웃
-
-생성
-
-firebase.js
-
-authStore.js
-
-LoginPage.jsx
-
-SignupPage.jsx
-
-결과
-
-Firebase 로그인 성공
-STEP 3
-
-로그인 애니메이션
-
-목표
-
-어서오세요 도일님
-
-↓
-
-도일님
-
-↓
-
-도일님의 주식 현황
-
-Framer Motion 적용
-
-생성
-
-WelcomeAnimation.jsx
-STEP 4
-
-Dashboard 레이아웃
-
-목표
-
-Header
-
-Summary
-
-Table
-
-Chart
-
-생성
-
-DashboardPage.jsx
-
-Header.jsx
-
-SummaryCards.jsx
-
-결과
-
-금융 대시보드 뼈대 완성
-
-STEP 5
-
-Firestore 구조 구축
-
-목표
-
-users
-
-holdings
-
-transactions
-
-생성
-
-stockService.js
-
-holdingTable.js
-
-결과
-
-Firestore CRUD 가능
-
-STEP 6
-
-보유 종목 CRUD
-
-목표
-
-추가
-
-수정
-
-삭제
-
-생성
-
-AddStockModal.jsx
-
-EditStockModal.jsx
-
-DeleteStockModal.jsx
-
-결과
-
-실제 종목 관리 가능
-
-STEP 7
-
-Express 서버 구축
-
-목표
-
-backend
-
-생성
-
-server.js
-
-app.js
-
-결과
-
-API 서버 실행
-
-STEP 8
-
-Yahoo Finance 연동
-
-목표
-
-Express
-
-↓
-
-Python
-
-↓
-
-yfinance
-
-생성
-
-python/
-
-stock_price.py
-
-stock_chart.py
-
-생성
-
-market.routes.js
-
-결과
-
-GET /market/price
-
-동작
-
-STEP 9
-
-실시간 가격 캐시
-
-목표
-
-node-cron
-
-memory cache
-
-생성
-
-cache.service.js
-
-price.cron.js
-
-결과
-
-1분마다 갱신
-
-STEP 10
-
-Socket.io
-
-목표
-
-실시간 가격 반영
-
-생성
-
-socket/index.js
-
-useSocket.js
-
-결과
-
-실시간 가격 변경
-
-STEP 11
-
-ApexCharts
-
-목표
-1일
-1주
-1개월
-1년
-전체 기간
-생성
-
-StockChart.jsx
-
-결과
-
-차트 완성
-
-STEP 12
-
-배포
-
-목표
-
-Github Actions
-
-생성
-
-.github/workflows/deploy.yml
-
-결과
-
-자동 배포
-
-내가 추천하는 실제 진행 방식
-
-당신의 경우는 다음 순서가 가장 효율적입니다.
-
-STEP 1
-프로젝트 초기 세팅
-
-↓
-
-STEP 2
-Firebase 로그인
-
-↓
-
-STEP 3
-Dashboard UI
-
-↓
-
-STEP 4
-Firestore CRUD
-
-↓
-
-STEP 5
-Express 서버
-
-↓
-
-STEP 6
-Yahoo Finance
-
-↓
-
-STEP 7
-Socket.io
-
-↓
-
-STEP 8
-차트
-
-↓
-
-STEP 9
-배포
-
-이렇게 하면 매 단계마다 실행 가능한 완성본을 얻을 수 있습니다.
-
-그리고 앞으로 내가 코드를 제공할 때는 반드시:
-
-[CREATE]
-파일경로
-
-전체 코드
-
-또는
-
-[MODIFY]
-파일경로
-
-전체 교체 코드
-
-형식으로 제공하면, 사용자는 파일을 찾거나 부분 수정 위치를 고민할 필요 없이 그대로 적용할 수 있습니다.
-
-마지막에 현재 생성된 모든 디렉토리, 파일 구조를 보여줍니다.
-
-
-좋아요! STEP  전부 해결했어요. 이제 STEP  진행해주세요.
+아래는 코드 생성 단계입니다. 
+*중요*
+바로 코드를 제공해주셔야합니다

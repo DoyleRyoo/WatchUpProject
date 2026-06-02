@@ -1,27 +1,20 @@
-import { useNavigate } from "react-router-dom";
-import useAuthStore from "../store/authStore";
+import { signOut } from "firebase/auth";
+import { auth } from "../services/firebase";
 
-export default function Header() {
-  const navigate = useNavigate();
-
-  const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
-
+export default function Header({
+  nickname,
+}) {
   const handleLogout = async () => {
-    await logout();
-    navigate("/login");
+    await signOut(auth);
   };
 
   return (
     <header
       className="
-      sticky
-      top-0
-      z-50
+      sticky top-0 z-50
       backdrop-blur-xl
-      bg-slate-950/70
-      border-b
-      border-slate-800
+      bg-white/5
+      border-b border-white/10
       "
     >
       <div
@@ -29,37 +22,42 @@ export default function Header() {
         max-w-7xl
         mx-auto
         px-6
-        h-16
+        py-4
         flex
-        items-center
         justify-between
+        items-center
         "
       >
         <h1
           className="
           text-2xl
-          font-black
+          font-bold
           text-white
-          tracking-tight
           "
         >
           Watch Up
         </h1>
 
-        <div className="flex items-center gap-4">
-          <span className="text-slate-300">
-            {user?.displayName || "Investor"}
-          </span>
+        <div className="flex gap-3">
+          <button
+            className="
+            h-11
+            px-5
+            rounded-xl
+            bg-white/10
+            text-white
+            "
+          >
+            {nickname}
+          </button>
 
           <button
             onClick={handleLogout}
             className="
-            px-4
-            py-2
+            h-11
+            px-5
             rounded-xl
             bg-red-500
-            hover:bg-red-600
-            transition
             text-white
             "
           >
