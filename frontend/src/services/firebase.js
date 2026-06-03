@@ -4,6 +4,8 @@ import { getAuth } from "firebase/auth";
 
 import { getFirestore } from "firebase/firestore";
 
+import { collection, addDoc, serverTimestamp, } from "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -18,5 +20,32 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 export const db = getFirestore(app);
+
+export async function addHolding(
+  uid,
+  stock
+) {
+  const docRef = await addDoc(
+    collection(
+      db,
+      "users",
+      uid,
+      "holdings"
+    ),
+    {
+      stockCode: stock.stockCode,
+      stockName: stock.stockName,
+      averagePrice: Number(stock.averagePrice),
+      quantity: Number(stock.quantity),
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    }
+  );
+
+  return {
+    id: docRef.id,
+    ...stock,
+  };
+}
 
 export default app;

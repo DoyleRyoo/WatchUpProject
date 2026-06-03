@@ -11,7 +11,7 @@ export default function FirstMeetPage() {
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="flex h-screen items-center justify-center bg-background">

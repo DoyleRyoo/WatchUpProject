@@ -1,4 +1,4 @@
-import "pretendard/dist/web/static/pretendard.css";
+//import "pretendard/dist/web/static/pretendard.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";

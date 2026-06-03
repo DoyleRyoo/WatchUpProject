@@ -14,6 +14,12 @@ import { getHoldings } from "../services/firestoreService";
 
 import { socket } from "../services/socket";
 
+import AddStockButton from "../components/AddStockButton";
+import AddStockModal from "../modals/AddStockModal";
+
+import SellStockModal from "../modals/SellStockModal";
+import DeleteStockModal from "../modals/DeleteStockModal";
+
 export default function DashboardPage() {
   const updatePrice = useStockStore(
     (state) => state.updatePrice
@@ -25,10 +31,9 @@ export default function DashboardPage() {
     return () => {
       socket.off("stock:update", updatePrice);
     };
-  }, []);
+  }, [updatePrice]);
   
   const {
-    holdings,
     selectedStock,
     setHoldings,
   } = useStockStore();
@@ -47,7 +52,7 @@ export default function DashboardPage() {
     };
 
     load();
-  }, []);
+  }, [setHoldings]);
 
   return (
     <DashboardLayout
@@ -57,6 +62,10 @@ export default function DashboardPage() {
       }
     >
       <SummaryCards />
+
+      <div className="h-6" />
+
+      <AddStockButton />
 
       <div className="h-6" />
 
@@ -86,6 +95,10 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+      
+      <AddStockModal />
+      <SellStockModal />
+      <DeleteStockModal />
     </DashboardLayout>
   );
 }

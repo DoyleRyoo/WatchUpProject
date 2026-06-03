@@ -1,70 +1,56 @@
-import { signOut } from "firebase/auth";
-import { auth } from "../services/firebase";
-
-export default function Header({
-  nickname,
-}) {
-  const handleLogout = async () => {
-    await signOut(auth);
-  };
+export default function SummaryCards() {
+  const cards = [
+    "TOTAL BUY",
+    "TOTAL ASSET",
+    "TOTAL RETURN",
+    "TOTAL PROFIT",
+  ];
 
   return (
-    <header
+    <div
       className="
-      sticky top-0 z-50
-      backdrop-blur-xl
-      bg-white/5
-      border-b border-white/10
+      grid
+      grid-cols-1
+      md:grid-cols-2
+      xl:grid-cols-4
+      gap-4
       "
     >
-      <div
-        className="
-        max-w-7xl
-        mx-auto
-        px-6
-        py-4
-        flex
-        justify-between
-        items-center
-        "
-      >
-        <h1
+      {cards.map((card) => (
+        <div
+          key={card}
           className="
-          text-2xl
-          font-bold
-          text-white
+          p-5
+          rounded-2xl
+          bg-white/5
+          border
+          border-white/10
+          hover:scale-105
+          transition
+          cursor-pointer
           "
         >
-          Watch Up
-        </h1>
-
-        <div className="flex gap-3">
-          <button
+          <p
             className="
-            h-11
-            px-5
-            rounded-xl
-            bg-white/10
-            text-white
+            text-sm
+            text-zinc-400
             "
           >
-            {nickname}
-          </button>
+            {card}
+          </p>
 
-          <button
-            onClick={handleLogout}
+          <h3
             className="
-            h-11
-            px-5
-            rounded-xl
-            bg-red-500
+            text-2xl
+            font-bold
             text-white
+            mt-3
             "
           >
-            Logout
-          </button>
+            ₩0
+          </h3>
         </div>
-      </div>
-    </header>
+      ))}
+    </div>
   );
 }

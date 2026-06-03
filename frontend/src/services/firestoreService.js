@@ -5,6 +5,7 @@ import {
   deleteDoc,
   updateDoc,
   doc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import { db } from "../services/firebase";
@@ -30,11 +31,7 @@ export const addHolding = async (uid, data) => {
   });
 };
 
-export const updateHolding = async (
-  uid,
-  holdingId,
-  data
-) => {
+export const updateHolding = async (uid, holdingId, data) => {
   const ref = doc(
     db,
     "users",
@@ -49,10 +46,7 @@ export const updateHolding = async (
   });
 };
 
-export const deleteHolding = async (
-  uid,
-  holdingId
-) => {
+export const deleteHolding = async (uid, holdingId) => {
   const ref = doc(
     db,
     "users",
@@ -63,3 +57,39 @@ export const deleteHolding = async (
 
   return deleteDoc(ref);
 };
+
+export const createTransaction = async (uid, data) => {
+  const ref = collection(
+    db,
+    "users",
+    uid,
+    "transactions"
+  );
+
+  await addDoc(ref, {
+    ...data,
+    createdAt: serverTimestamp(),
+  });
+};
+
+export const useStockStore = create((set) => ({
+  holdings: [],
+
+  setHoldings: (holdings) =>
+    set({ holdings }),
+
+  addHolding: (holding) =>
+    set((state) => ({
+      holdings: [
+        ...state.holdings,
+        holding,
+      ],
+    })),
+
+  removeHolding: (id) =>
+    set((state) => ({
+      holdings: state.holdings.filter(
+        (holding) => holding.id !== id
+      ),
+    })),
+}));

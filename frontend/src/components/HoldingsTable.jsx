@@ -1,4 +1,8 @@
+import { useState, useEffect } from "react";
+
 import useStockStore from "../store/useStockStore";
+
+import HoldingOptionMenu from "./HoldingOptionMenu";
 
 export default function HoldingsTable() {
   const {
@@ -8,9 +12,27 @@ export default function HoldingsTable() {
     clearSelectedStock,
   } = useStockStore();
 
-  const prices = useStockStore(
-    (state) => state.prices
-  );
+  const prices = useStockStore((state) => state.prices);
+
+  const [openMenuId, setOpenMenuId] = useState(null);
+  
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setOpenMenuId(null);
+    };
+
+    document.addEventListener(
+      "click",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "click",
+        handleClickOutside
+      );
+    };
+  }, []);
 
   if (!holdings?.length) {
     return (
@@ -27,12 +49,7 @@ export default function HoldingsTable() {
   }
 
   return (
-    <table
-      className="
-      w-full
-      text-white
-      "
-    >
+    <table className="w-full text-white text-center">
       <thead>
         <tr>
           <th>NAME</th>
@@ -40,16 +57,17 @@ export default function HoldingsTable() {
           <th>AMOUNT</th>
           <th>CURRENT</th>
           <th>RETURN</th>
+          <th> </th>
         </tr>
       </thead>
 
       <tbody>
         {holdings.map((stock) => {
-          const currentPrice = prices[item.stockCode]?.price || 0;
+          const currentPrice = prices[stock.stockCode]?.price || 0;
 
           const returnRate = currentPrice
             ? (
-              ((currentPrice - item.averagePrice) / item.averagePrice) * 100
+              ((currentPrice - stock.averagePrice) / stock.averagePrice) * 100
             ).toFixed(2) 
             : 0;
 
@@ -87,8 +105,42 @@ export default function HoldingsTable() {
               >
                 {returnRate}%
               </td>
+
+              <td className="relative" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    setOpenMenuId(
+                      openMenuId === stock.id
+                        ? null
+                        : stock.id
+                    );
+                  }}
+                  className="
+                  w-8
+                  h-8
+
+                  rounded-lg
+
+                  hover:bg-zinc-700
+
+                  transition
+                  "
+                >
+                  ⋮
+                </button>
+
+                <HoldingOptionMenu
+                  stock={stock}
+                  open={openMenuId === stock.id}
+                  onClose={() =>
+                    setOpenMenuId(null)
+                  }
+                />
+              </td>
             </tr>
-          )
+          );
         })}
       </tbody>
     </table>
