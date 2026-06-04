@@ -21,31 +21,31 @@ export default function HoldingOptionMenu({
     >
 
       <button
+        className="w-full px-4 py-3 text-left hover:bg-zinc-800 transition"
         onClick={() => {
           openSellModal(stock);
           onClose();
         }}
-        className="w-full px-4 py-3 text-left hover:bg-zinc-800 transition"
       >
         판매
       </button>
 
       <button
+        className="w-full px-4 py-3 text-left hover:bg-zinc-800 transition        "
         onClick={() => {
           openEditModal(stock);
           onClose();
         }}
-        className="w-full px-4 py-3 text-left hover:bg-zinc-800 transition        "
       >
         수정
       </button>
 
       <button
+        className="w-full px-4 py-3 text-left text-red-500 hover:bg-zinc-800 transition"
         onClick={() => {
           openDeleteModal(stock);
           onClose();
         }}
-        className="w-full px-4 py-3 text-left text-red-500 hover:bg-zinc-800 transition"
       >
         삭제
       </button>

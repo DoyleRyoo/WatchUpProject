@@ -1,7 +1,6 @@
 import json
 import sys
 
-
 symbol = sys.argv[1]
 
 try:

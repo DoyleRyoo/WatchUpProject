@@ -7,14 +7,11 @@ import { useNavigate } from "react-router-dom";
 export default function SignupPage() {
   const navigate = useNavigate();
 
-  const [email, setEmail] =
-    useState("");
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
-  const [nickname, setNickname] =
-    useState("");
+  const [nickname, setNickname] = useState("");
 
   const handleSignup = async () => {
     try {
@@ -27,6 +24,12 @@ export default function SignupPage() {
       navigate("/login");
     } catch (err) {
       alert(err.message);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSignup();
     }
   };
 
@@ -48,6 +51,7 @@ export default function SignupPage() {
             onChange={(e) =>
               setEmail(e.target.value)
             }
+            onKeyDown={handleKeyDown}
           />
 
           <input
@@ -55,27 +59,21 @@ export default function SignupPage() {
             className="h-12 w-full rounded-xl bg-slate-800 px-4"
             placeholder="Password"
             value={password}
-            onChange={(e) =>
-              setPassword(
-                e.target.value
-              )
-            }
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
 
           <input
             className="h-12 w-full rounded-xl bg-slate-800 px-4"
             placeholder="Nickname"
             value={nickname}
-            onChange={(e) =>
-              setNickname(
-                e.target.value
-              )
-            }
+            onChange={(e) => setNickname(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
 
           <button
-            onClick={handleSignup}
             className="h-12 w-full rounded-xl bg-blue-600"
+            onClick={handleSignup}
           >
             Sign Up
           </button>

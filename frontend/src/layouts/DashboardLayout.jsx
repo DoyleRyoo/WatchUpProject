@@ -5,22 +5,10 @@ export default function DashboardLayout({
   nickname,
 }) {
   return (
-    <div
-      className="
-      min-h-screen
-      bg-zinc-950
-      "
-    >
+    <div className="min-h-screen bg-zinc-950">
       <Header nickname={nickname} />
 
-      <main
-        className="
-        max-w-7xl
-        mx-auto
-        px-6
-        py-6
-        "
-      >
+      <main className="max-w-7xl mx-auto px-6 py-6">
         {children}
       </main>
     </div>
